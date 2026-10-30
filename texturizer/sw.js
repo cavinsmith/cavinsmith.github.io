@@ -1,28 +1,6 @@
-// Offline support: the app shell and everything fetched from this origin is
-// cached as it is used; the network wins when it is there (so updates show
-// up), the cache answers when it is not.
-const CACHE = "texturizer-v1";
-
-self.addEventListener("install", (e) => {
-  e.waitUntil(caches.open(CACHE).then((c) => c.addAll(["./", "./index.html", "./manifest.webmanifest", "./icon.svg"])));
-  self.skipWaiting();
-});
-
+// The old Texturizer's offline cache gives way: an installed copy reaches the redirect page.
+self.addEventListener("install", () => self.skipWaiting());
 self.addEventListener("activate", (e) => {
-  e.waitUntil(caches.keys().then((keys) => Promise.all(keys.filter((k) => k !== CACHE).map((k) => caches.delete(k)))));
-  self.clients.claim();
-});
-
-self.addEventListener("fetch", (e) => {
-  const req = e.request;
-  if (req.method !== "GET" || new URL(req.url).origin !== self.location.origin) return;
-  e.respondWith(
-    fetch(req).then((res) => {
-      if (res.ok) {
-        const copy = res.clone();
-        caches.open(CACHE).then((c) => c.put(req, copy));
-      }
-      return res;
-    }).catch(() => caches.match(req).then((hit) => hit || caches.match("./index.html")))
-  );
+  e.waitUntil(caches.keys().then((keys) => Promise.all(keys.map((k) => caches.delete(k))))
+    .then(() => self.registration.unregister()));
 });

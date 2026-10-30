@@ -1,0 +1,39 @@
+{
+  "name": "Primtool",
+  "short_name": "Primtool",
+  "description": "Инструменты для отдельных деталей под 3D-печать — Texturizer (рельефные текстуры), Проставки — прямо в браузере",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#16181d",
+  "theme_color": "#1f2228",
+  "lang": "ru",
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ],
+  "file_handlers": [
+    {
+      "action": "./",
+      "accept": {
+        "model/stl": [
+          ".stl"
+        ],
+        "model/3mf": [
+          ".3mf"
+        ],
+        "application/zip": [
+          ".txproj"
+        ],
+        "application/json": [
+          ".spacer",
+          ".bauble"
+        ]
+      }
+    }
+  ]
+}
